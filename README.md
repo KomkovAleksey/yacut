@@ -1,4 +1,4 @@
-# ✂️ YaCut_project
+# ✄ YaCut_project
 
 
 ## Оглавление
