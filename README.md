@@ -65,6 +65,9 @@ pip install -r requirements.txt
 ```
 
 * Создайте .env файл в корневой папке проекта. 
+```
+touch .env
+```
 В нем должны быть указаны. 
 ```
 FLASK_APP
