@@ -9,7 +9,10 @@ from . import app, db
 
 
 class InvalidAPIUsage(Exception):
-    """Если статус-код для ответа API не указан — вернётся код 400."""
+    """
+    Класс обработки ошибок  при неправильном использовании API.
+    Если статус-код для ответа API не указан — вернётся код 400.
+    """
     
     status_code = HTTPStatus.BAD_REQUEST
 
