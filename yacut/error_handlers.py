@@ -10,6 +10,7 @@ from . import app, db
 
 class InvalidAPIUsage(Exception):
     """Если статус-код для ответа API не указан — вернётся код 400."""
+    
     status_code = HTTPStatus.BAD_REQUEST
 
     def __init__(self, message, status_code=None):

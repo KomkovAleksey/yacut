@@ -13,7 +13,7 @@ from .constants import SHORT_ID_LENGHT
 
 
 def get_unique_short_id(long_url):
-    """Функция формирования короткой ссылки."""
+    """Функция формирования short_id."""
     generaited_short_id = random.choices(
         hashlib.md5(long_url.encode()).hexdigest(),
         k=SHORT_ID_LENGHT
