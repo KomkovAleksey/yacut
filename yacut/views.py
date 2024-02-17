@@ -6,7 +6,7 @@ from flask import flash, render_template, redirect
 from . import app
 from .forms import URLForm
 from .models import URLMap
-from .utils import get_unique_short_url, get_add_url_to_db
+from .utils import get_unique_short_id, get_add_to_db
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -23,13 +23,9 @@ def index_view():
 
                 return render_template('yacut.html', form=URLForm())
 
-            get_add_url_to_db(URLForm().custom_id.data)
-        short_url = get_unique_short_url(URLForm().original_link.data)
-        if URLMap.query.filter_by(short=short_url).first() is not None:
-            short_url = get_unique_short_url(URLForm().original_link.data)
-            get_add_url_to_db(short_url)
-
-        get_add_url_to_db(short_url)
+            get_add_to_db(URLForm().custom_id.data)
+        short_id = get_unique_short_id(URLForm().original_link.data)
+        get_add_to_db(short_id)
 
     return render_template('yacut.html', form=URLForm())
 

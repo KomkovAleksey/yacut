@@ -9,7 +9,7 @@ from flask import jsonify, request
 from . import app, db
 from .models import URLMap
 from .error_handlers import InvalidAPIUsage
-from .utils import get_unique_short_url
+from .utils import get_unique_short_id
 
 
 @app.route('/api/id/<short_id>/', methods=['GET'])
@@ -35,7 +35,7 @@ def add_url():
         raise InvalidAPIUsage("\"url\" является обязательным полем!")
     custom_id = data.get('custom_id')
     if not custom_id or custom_id == '':
-        custom_id = get_unique_short_url(data.get('url'))
+        custom_id = get_unique_short_id(data.get('url'))
         data['custom_id'] = custom_id
     else:
         if len(custom_id) > 16 or not re.match(r'^[A-Za-z0-9]+$', custom_id):
