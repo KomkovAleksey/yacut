@@ -7,6 +7,8 @@ from wtforms.validators import DataRequired, Length, Optional, Regexp, URL
 
 
 class URLForm(FlaskForm):
+    """Класс формы для создания короткой ссылки."""
+    
     original_link = URLField(
         'Длинная ссылка.',
         validators=[

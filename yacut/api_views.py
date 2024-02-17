@@ -1,8 +1,10 @@
 """
 Файл функций и методов обработки запросов и отправки ответов через API.
 """
-from flask import jsonify, request
+from http import HTTPStatus
 import re
+
+from flask import jsonify, request
 
 from . import app, db
 from .models import URLMap
@@ -18,9 +20,9 @@ def get_original_url(short_id):
     """
     url_map = URLMap.query.filter_by(short=short_id).first()
     if url_map is None:
-        raise InvalidAPIUsage('Указанный id не найден', 404)
+        raise InvalidAPIUsage('Указанный id не найден', HTTPStatus.NOT_FOUND)
 
-    return jsonify(url=url_map.original), 200
+    return jsonify(url=url_map.original), HTTPStatus.OK
 
 
 @app.route('/api/id/', methods=['POST'])
@@ -37,7 +39,7 @@ def add_url():
         data['custom_id'] = custom_id
     else:
         if len(custom_id) > 16 or not re.match(r'^[A-Za-z0-9]+$', custom_id):
-            raise InvalidAPIUsage('Указано недопустимое имя для короткой ссылки', 400)
+            raise InvalidAPIUsage('Указано недопустимое имя для короткой ссылки', HTTPStatus.BAD_REQUEST)
         if URLMap.query.filter_by(short=data.get('custom_id')).first() is not None:
             raise InvalidAPIUsage(
                 'Предложенный вариант короткой ссылки уже существует.',
@@ -48,4 +50,4 @@ def add_url():
     db.session.add(url_map)
     db.session.commit()
 
-    return jsonify(url_map.to_dict()), 201
+    return jsonify(url_map.to_dict()), HTTPStatus.CREATED

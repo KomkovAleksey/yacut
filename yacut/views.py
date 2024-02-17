@@ -12,7 +12,7 @@ from .utils import get_unique_short_url, get_add_url_to_db
 @app.route('/', methods=['GET', 'POST'])
 def index_view():
     """
-    Обрабатывает 'GET' и 'POST' запросы к главной странице.
+    Функция обрабатывающая запросы к главной странице.
     'GET' запрос отображает форму на экране.
     'POST' запрос создает короткую ссылку.
     """
