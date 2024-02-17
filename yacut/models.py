@@ -23,10 +23,10 @@ class URLMap(db.Model):
 
     def from_dict(self, data):
         """Десериализатор."""
-        API_FIELDS = {
+        api_column_fields = {
             'url': 'original',
             'custom_id': 'short',
         }
-        for field in API_FIELDS:
+        for field in api_column_fields:
             if field in data:
-                setattr(self, API_FIELDS[field], data[field])
+                setattr(self, api_column_fields[field], data[field])
