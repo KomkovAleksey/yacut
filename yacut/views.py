@@ -32,5 +32,6 @@ def index_view():
 
 @app.route('/<string:short>', methods=['GET'])
 def redirect_short_url(short):
+    """Перенаправляет на оригинальную ссылку."""
     url_map = URLMap.query.filter_by(short=short).first_or_404()
     return redirect(url_map.original)
