@@ -10,6 +10,11 @@ from . import app, db
 from .models import URLMap
 from .error_handlers import InvalidAPIUsage
 from .utils import get_unique_short_id
+from .constants import (
+    ErrorTextYacut, 
+    ALLOWED_CHARACTERS, 
+    CUSTOM_ID_MAX_LENGTH,
+)
 
 
 @app.route('/api/id/<short_id>/', methods=['GET'])
@@ -20,7 +25,10 @@ def get_original_url(short_id):
     """
     url_map = URLMap.query.filter_by(short=short_id).first()
     if url_map is None:
-        raise InvalidAPIUsage('Указанный id не найден', HTTPStatus.NOT_FOUND)
+        raise InvalidAPIUsage(
+            ErrorTextYacut.ID_NOT_FAUND,
+            HTTPStatus.NOT_FOUND
+        )
 
     return jsonify(url=url_map.original), HTTPStatus.OK
 
@@ -30,20 +38,21 @@ def add_url():
     """POST-запрос на создание новой короткой ссылки."""
     data = request.get_json()
     if not data:
-        raise InvalidAPIUsage('Отсутствует тело запроса')
+        raise InvalidAPIUsage(ErrorTextYacut.REQUEST_BODY_MISSING)
     if not data.get('url'):
-        raise InvalidAPIUsage("\"url\" является обязательным полем!")
+        raise InvalidAPIUsage(ErrorTextYacut.URL_MISSING)
     custom_id = data.get('custom_id')
     if not custom_id or custom_id == '':
         custom_id = get_unique_short_id(data.get('url'))
         data['custom_id'] = custom_id
     else:
-        if len(custom_id) > 16 or not re.match(r'^[A-Za-z0-9]+$', custom_id):
-            raise InvalidAPIUsage('Указано недопустимое имя для короткой ссылки', HTTPStatus.BAD_REQUEST)
-        if URLMap.query.filter_by(short=data.get('custom_id')).first() is not None:
+        if len(custom_id) > CUSTOM_ID_MAX_LENGTH or not re.match(ALLOWED_CHARACTERS, custom_id):
             raise InvalidAPIUsage(
-                'Предложенный вариант короткой ссылки уже существует.',
+                ErrorTextYacut.SHORT_LINK_INVALID_NAME,
+                HTTPStatus.BAD_REQUEST
             )
+        if URLMap.query.filter_by(short=data.get('custom_id')).first() is not None:
+            raise InvalidAPIUsage(ErrorTextYacut.SHORT_ID_DUPLICTE)
 
     url_map = URLMap()
     url_map.from_dict(data)

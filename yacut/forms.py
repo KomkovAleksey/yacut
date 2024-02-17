@@ -5,6 +5,14 @@ from flask_wtf import FlaskForm
 from wtforms import SubmitField, URLField, StringField
 from wtforms.validators import DataRequired, Length, Optional, Regexp, URL
 
+from .constants import (
+    ErrorTextYacut,
+    ALLOWED_CHARACTERS,
+    CUSTOM_ID_MAX_LENGTH,
+    ORIGINAL_MAX_LENGTH,
+    ORIGINAL_MIN_LENGTH,
+)
+
 
 class URLForm(FlaskForm):
     """Класс формы для создания короткой ссылки."""
@@ -12,19 +20,22 @@ class URLForm(FlaskForm):
     original_link = URLField(
         'Длинная ссылка.',
         validators=[
-            DataRequired(message='Обязательное поле'),
-            Length(1, 256),
-            URL(require_tld=True, message='Проверьте вводимый адрес ссылки.')
+            DataRequired(message=ErrorTextYacut.OBLIGATORY_FIELD),
+            Length(ORIGINAL_MIN_LENGTH, ORIGINAL_MAX_LENGTH),
+            URL(require_tld=True, message=ErrorTextYacut.WRONG_URL)
         ]
     )
     custom_id = StringField(
         'Ваш вариант короткой ссылки.',
         validators=[
-            Length(1, 16, message='Длинна ссылки болше 16 символов.'),
+            Length(
+                max=CUSTOM_ID_MAX_LENGTH,
+                message=ErrorTextYacut.TOO_LONG_SHORT_LINK
+            ),
             Optional(),
             Regexp(
-                regex=r'^[A-Za-z0-9]+$',
-                message='Недопустимое имя короткой ссылки.'
+                regex=ALLOWED_CHARACTERS,
+                message=ErrorTextYacut.SHORT_LINK_INVALID_NAME
             ),
         ]
     )

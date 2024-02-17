@@ -7,6 +7,7 @@ from . import app
 from .forms import URLForm
 from .models import URLMap
 from .utils import get_unique_short_id, get_add_to_db
+from .constants import ErrorTextYacut
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -19,7 +20,7 @@ def index_view():
     if URLForm().validate_on_submit():
         if URLForm().custom_id.data:
             if URLMap.query.filter_by(short=URLForm().custom_id.data).first() is not None:
-                flash('"Предложенный вариант короткой ссылки уже существует."', 'error')
+                flash(ErrorTextYacut.SHORT_ID_DUPLICTE, 'error')
 
                 return render_template('yacut.html', form=URLForm())
 

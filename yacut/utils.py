@@ -9,13 +9,14 @@ from flask import flash, render_template, url_for
 from . import db
 from .models import URLMap
 from .forms import URLForm
+from .constants import SHORT_ID_LENGHT
 
 
 def get_unique_short_id(long_url):
     """Функция формирования короткой ссылки."""
     generaited_short_id = random.choices(
         hashlib.md5(long_url.encode()).hexdigest(),
-        k=6
+        k=SHORT_ID_LENGHT
     )
     short_id = ''.join(generaited_short_id)
     while URLMap.query.filter_by(short=short_id).first():
