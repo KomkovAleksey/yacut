@@ -11,8 +11,8 @@ from .models import URLMap
 from .error_handlers import InvalidAPIUsage
 from .utils import get_unique_short_id
 from .constants import (
-    ErrorTextYacut, 
-    ALLOWED_CHARACTERS, 
+    ErrorTextYacut,
+    ALLOWED_CHARACTERS,
     CUSTOM_ID_MAX_LENGTH,
 )
 

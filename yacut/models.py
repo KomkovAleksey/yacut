@@ -5,6 +5,8 @@ from datetime import datetime
 
 from yacut import db
 
+from .constants import LOCALHOST
+
 
 class URLMap(db.Model):
     """Модель для работы с ссылками."""
@@ -18,7 +20,7 @@ class URLMap(db.Model):
         """Сериализатор."""
         return dict(
             url=self.original,
-            short_link='http://localhost/' + self.short,
+            short_link=LOCALHOST + self.short,
         )
 
     def from_dict(self, data):

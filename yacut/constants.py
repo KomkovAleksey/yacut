@@ -2,6 +2,7 @@
 Константы.
 """
 ALLOWED_CHARACTERS = r'^[A-Za-z0-9]+$'
+LOCALHOST = 'http://localhost/'
 CUSTOM_ID_MAX_LENGTH = 16
 ORIGINAL_MAX_LENGTH = 256
 ORIGINAL_MIN_LENGTH = 1
@@ -18,4 +19,4 @@ class ErrorTextYacut():
     SHORT_LINK_INVALID_NAME = 'Указано недопустимое имя для короткой ссылки'
     TOO_LONG_SHORT_LINK = 'Длинна ссылки болше 16 символов.'
     WRONG_URL = 'Проверьте вводимый адрес ссылки.'
-    OBLIGATORY_FIELD ='Обязательное поле'
+    OBLIGATORY_FIELD = 'Обязательное поле'

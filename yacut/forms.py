@@ -16,7 +16,7 @@ from .constants import (
 
 class URLForm(FlaskForm):
     """Класс формы для создания короткой ссылки."""
-    
+
     original_link = URLField(
         'Длинная ссылка.',
         validators=[
