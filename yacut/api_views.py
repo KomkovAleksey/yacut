@@ -1,3 +1,6 @@
+"""
+Файл функций и методов обработки запросов и отправки ответов через API.
+"""
 from flask import jsonify, request
 import re
 

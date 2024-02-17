@@ -1,3 +1,6 @@
+"""
+Файл с классами форм приложения 'yacut'.
+"""
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, URLField, StringField
 from wtforms.validators import DataRequired, Length, Optional, Regexp, URL

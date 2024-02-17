@@ -1,6 +1,8 @@
+"""
+Файл дополнительных функций
+"""
 import random
 import hashlib
-import re
 
 from flask import flash, render_template, url_for
 

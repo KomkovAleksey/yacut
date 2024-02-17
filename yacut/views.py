@@ -1,3 +1,6 @@
+"""
+Файл с view-функциями приложения 'yacut'.
+"""
 from flask import flash, render_template, redirect
 
 from . import app

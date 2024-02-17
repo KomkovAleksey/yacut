@@ -1,3 +1,6 @@
+"""
+Файл с обработчиками ошибок приложения 'yacut'.
+"""
 from flask import jsonify, render_template
 
 from . import app, db

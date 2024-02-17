@@ -1,3 +1,6 @@
+"""
+Файл с моделями приложения 'yacut'.
+"""
 from datetime import datetime
 
 from yacut import db
