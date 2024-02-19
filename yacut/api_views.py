@@ -39,6 +39,6 @@ def add_url():
     )
 
     return jsonify(URLMap(
-        original = request.get_json().get('url'),
-        short = request.get_json().get('custom_id')).to_dict()
+        original=request.get_json().get('url'),
+        short=request.get_json().get('custom_id')).to_dict()
     ), HTTPStatus.CREATED
