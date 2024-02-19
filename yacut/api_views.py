@@ -2,19 +2,14 @@
 Файл функций и методов обработки запросов и отправки ответов через API.
 """
 from http import HTTPStatus
-import re
 
 from flask import jsonify, request
 
-from . import app, db
+from . import app
 from .models import URLMap
 from .error_handlers import InvalidAPIUsage
-from .utils import get_unique_short_id
-from .constants import (
-    ErrorTextYacut,
-    ALLOWED_CHARACTERS,
-    CUSTOM_SHORT_ID_MAX_LENGTH,
-)
+from .utils import validate_data, add_to_db
+from .constants import ErrorTextYacut
 
 
 @app.route('/api/id/<short_id>/', methods=['GET'])
@@ -36,27 +31,14 @@ def get_original_url(short_id):
 @app.route('/api/id/', methods=['POST'])
 def add_url():
     """POST-запрос на создание новой короткой ссылки."""
-    data = request.get_json()
-    if not data:
-        raise InvalidAPIUsage(ErrorTextYacut.REQUEST_BODY_MISSING)
-    if not data.get('url'):
-        raise InvalidAPIUsage(ErrorTextYacut.URL_MISSING)
-    custom_id = data.get('custom_id')
-    if not custom_id or custom_id == '':
-        custom_id = get_unique_short_id(data.get('url'))
-        data['custom_id'] = custom_id
-    else:
-        if len(custom_id) > CUSTOM_SHORT_ID_MAX_LENGTH or not re.match(ALLOWED_CHARACTERS, custom_id):
-            raise InvalidAPIUsage(
-                ErrorTextYacut.SHORT_LINK_INVALID_NAME,
-                HTTPStatus.BAD_REQUEST
-            )
-        if URLMap.query.filter_by(short=data.get('custom_id')).first() is not None:
-            raise InvalidAPIUsage(ErrorTextYacut.SHORT_ID_DUPLICTE)
+    validate_data(request.get_json())
+    add_to_db(
+        URLMap,
+        request.get_json().get('custom_id'),
+        request.get_json().get('url'),
+    )
 
-    url_map = URLMap()
-    url_map.from_dict(data)
-    db.session.add(url_map)
-    db.session.commit()
-
-    return jsonify(url_map.to_dict()), HTTPStatus.CREATED
+    return jsonify(URLMap(
+        original = request.get_json().get('url'),
+        short = request.get_json().get('custom_id')).to_dict()
+    ), HTTPStatus.CREATED

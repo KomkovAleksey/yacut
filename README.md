@@ -86,7 +86,7 @@ flask shell
 ```
 * Введите команды по очереди:
 ```
->>> from opinions_app import db
+>>> from yacut import db
 ```
 ```
 >>> db.create_all()

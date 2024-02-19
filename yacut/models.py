@@ -3,7 +3,7 @@
 """
 from datetime import datetime
 
-from yacut import db
+from .import db
 
 from .constants import LOCALHOST, ORIGINAL_MAX_LENGTH, CUSTOM_SHORT_ID_MAX_LENGTH
 
@@ -22,13 +22,3 @@ class URLMap(db.Model):
             url=self.original,
             short_link=LOCALHOST + self.short,
         )
-
-    def from_dict(self, data):
-        """Десериализатор."""
-        api_column_fields = {
-            'url': 'original',
-            'custom_id': 'short',
-        }
-        for field in api_column_fields:
-            if field in data:
-                setattr(self, api_column_fields[field], data[field])

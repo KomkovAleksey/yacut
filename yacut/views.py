@@ -1,12 +1,12 @@
 """
 Файл с view-функциями приложения 'yacut'.
 """
-from flask import flash, render_template, redirect
+from flask import flash, render_template, redirect, url_for
 
 from . import app
 from .forms import URLForm
 from .models import URLMap
-from .utils import get_unique_short_id, get_add_to_db
+from .utils import get_unique_short_id, add_to_db
 from .constants import ErrorTextYacut
 
 
@@ -24,9 +24,31 @@ def index_view():
 
                 return render_template('yacut.html', form=URLForm())
 
-            get_add_to_db(URLForm().custom_id.data)
-        short_id = get_unique_short_id(URLForm().original_link.data)
-        get_add_to_db(short_id)
+            add_to_db(
+                URLMap,
+                URLForm().custom_id.data,
+                URLForm().original_link.data
+            )
+            flash(url_for(
+                'redirect_short_url',
+                short=URLForm().custom_id.data,
+                _external=True), 'short_link'
+            )
+
+            return render_template('yacut.html', form=URLForm())
+
+        add_to_db(
+            URLMap,
+            get_unique_short_id(URLForm().original_link.data),
+            URLForm().original_link.data,
+        )
+        flash(url_for(
+            'redirect_short_url',
+            short=get_unique_short_id(URLForm().original_link.data),
+            _external=True), 'short_link'
+        )
+
+        return render_template('yacut.html', form=URLForm())
 
     return render_template('yacut.html', form=URLForm())
 
