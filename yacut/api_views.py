@@ -13,7 +13,7 @@ from .utils import get_unique_short_id
 from .constants import (
     ErrorTextYacut,
     ALLOWED_CHARACTERS,
-    CUSTOM_ID_MAX_LENGTH,
+    CUSTOM_SHORT_ID_MAX_LENGTH,
 )
 
 
@@ -46,7 +46,7 @@ def add_url():
         custom_id = get_unique_short_id(data.get('url'))
         data['custom_id'] = custom_id
     else:
-        if len(custom_id) > CUSTOM_ID_MAX_LENGTH or not re.match(ALLOWED_CHARACTERS, custom_id):
+        if len(custom_id) > CUSTOM_SHORT_ID_MAX_LENGTH or not re.match(ALLOWED_CHARACTERS, custom_id):
             raise InvalidAPIUsage(
                 ErrorTextYacut.SHORT_LINK_INVALID_NAME,
                 HTTPStatus.BAD_REQUEST

@@ -8,7 +8,7 @@ from wtforms.validators import DataRequired, Length, Optional, Regexp, URL
 from .constants import (
     ErrorTextYacut,
     ALLOWED_CHARACTERS,
-    CUSTOM_ID_MAX_LENGTH,
+    CUSTOM_SHORT_ID_MAX_LENGTH,
     ORIGINAL_MAX_LENGTH,
     ORIGINAL_MIN_LENGTH,
 )
@@ -29,7 +29,7 @@ class URLForm(FlaskForm):
         'Ваш вариант короткой ссылки.',
         validators=[
             Length(
-                max=CUSTOM_ID_MAX_LENGTH,
+                max=CUSTOM_SHORT_ID_MAX_LENGTH,
                 message=ErrorTextYacut.TOO_LONG_SHORT_LINK
             ),
             Optional(),
