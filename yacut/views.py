@@ -58,8 +58,7 @@ def index_view():
 @app.route('/<string:short>', methods=['GET'])
 def redirect_short_url(short):
     """Перенаправляет на оригинальную ссылку."""
-    url_map = check_in_db(URLMap, short)
-    if url_map is None:
+    if check_in_db(URLMap, short) is None:
         return abort(HTTPStatus.NOT_FOUND)
 
-    return redirect(url_map.original)
+    return redirect(check_in_db(URLMap, short).original)

@@ -17,14 +17,13 @@ def get_original_url(short_id):
     GET-запрос на получение оригинальной ссылки
     по указанному короткому идентификатору.
     """
-    url_map = check_in_db(URLMap, short_id)
-    if url_map is None:
+    if check_in_db(URLMap, short_id) is None:
         raise InvalidAPIUsage(
             ErrorText.ID_NOT_FAUND,
             HTTPStatus.NOT_FOUND
         )
 
-    return jsonify(url=url_map.original), HTTPStatus.OK
+    return jsonify(url=check_in_db(URLMap, short_id).original), HTTPStatus.OK
 
 
 @app.route('/api/id/', methods=['POST'])
