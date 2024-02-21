@@ -1,7 +1,9 @@
 """
 Файл с view-функциями приложения 'yacut'.
 """
-from flask import flash, render_template, redirect, url_for
+from http import HTTPStatus
+
+from flask import flash, render_template, redirect, url_for, abort
 
 from . import app
 from .forms import URLForm
@@ -56,6 +58,8 @@ def index_view():
 @app.route('/<string:short>', methods=['GET'])
 def redirect_short_url(short):
     """Перенаправляет на оригинальную ссылку."""
-    url_map = URLMap.query.filter_by(short=short).first_or_404()
+    url_map = check_in_db(URLMap, short)
+    if url_map is None:
+        return abort(HTTPStatus.NOT_FOUND)
 
     return redirect(url_map.original)
