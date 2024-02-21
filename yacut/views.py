@@ -6,8 +6,8 @@ from flask import flash, render_template, redirect, url_for
 from . import app
 from .forms import URLForm
 from .models import URLMap
-from .utils import get_unique_short_id, add_to_db
-from .constants import ErrorTextYacut
+from .utils import get_unique_short_id, add_to_db, check_in_db
+from .constants import ErrorText
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -19,8 +19,8 @@ def index_view():
     """
     if URLForm().validate_on_submit():
         if URLForm().custom_id.data:
-            if URLMap.query.filter_by(short=URLForm().custom_id.data).first() is not None:
-                flash(ErrorTextYacut.SHORT_ID_DUPLICTE, 'error')
+            if check_in_db(URLMap, URLForm().custom_id.data) is not None:
+                flash(ErrorText.SHORT_ID_DUPLICTE, 'error')
 
                 return render_template('yacut.html', form=URLForm())
 
@@ -57,4 +57,5 @@ def index_view():
 def redirect_short_url(short):
     """Перенаправляет на оригинальную ссылку."""
     url_map = URLMap.query.filter_by(short=short).first_or_404()
+    
     return redirect(url_map.original)

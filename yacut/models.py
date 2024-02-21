@@ -4,7 +4,6 @@
 from datetime import datetime
 
 from .import db
-
 from .constants import LOCALHOST, ORIGINAL_MAX_LENGTH, CUSTOM_SHORT_ID_MAX_LENGTH
 
 

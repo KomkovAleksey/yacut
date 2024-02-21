@@ -9,8 +9,8 @@ ORIGINAL_MIN_LENGTH = 1
 GENERAITED_SHORT_ID_LENGHT = 6
 
 
-class ErrorTextYacut():
-    """Текст ошибок для приложения 'yacut'."""
+class ErrorText():
+    """Текст ошибок."""
 
     SHORT_ID_DUPLICTE = 'Предложенный вариант короткой ссылки уже существует.'
     ID_NOT_FAUND = 'Указанный id не найден'

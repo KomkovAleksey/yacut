@@ -6,7 +6,7 @@ from wtforms import SubmitField, URLField, StringField
 from wtforms.validators import DataRequired, Length, Optional, Regexp, URL
 
 from .constants import (
-    ErrorTextYacut,
+    ErrorText,
     ALLOWED_CHARACTERS,
     CUSTOM_SHORT_ID_MAX_LENGTH,
     ORIGINAL_MAX_LENGTH,
@@ -20,9 +20,9 @@ class URLForm(FlaskForm):
     original_link = URLField(
         'Длинная ссылка.',
         validators=[
-            DataRequired(message=ErrorTextYacut.OBLIGATORY_FIELD),
+            DataRequired(message=ErrorText.OBLIGATORY_FIELD),
             Length(ORIGINAL_MIN_LENGTH, ORIGINAL_MAX_LENGTH),
-            URL(require_tld=True, message=ErrorTextYacut.WRONG_URL)
+            URL(require_tld=True, message=ErrorText.WRONG_URL)
         ]
     )
     custom_id = StringField(
@@ -30,12 +30,12 @@ class URLForm(FlaskForm):
         validators=[
             Length(
                 max=CUSTOM_SHORT_ID_MAX_LENGTH,
-                message=ErrorTextYacut.TOO_LONG_SHORT_LINK
+                message=ErrorText.TOO_LONG_SHORT_LINK
             ),
             Optional(),
             Regexp(
                 regex=ALLOWED_CHARACTERS,
-                message=ErrorTextYacut.SHORT_LINK_INVALID_NAME
+                message=ErrorText.SHORT_LINK_INVALID_NAME
             ),
         ]
     )
