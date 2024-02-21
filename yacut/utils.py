@@ -23,7 +23,7 @@ def get_unique_short_id(long_url):
     short_id = ''.join(generaited_short_id)
     while check_in_db(URLMap, short_id) is not None:
         get_unique_short_id(long_url)
-        
+
     return short_id
 
 
