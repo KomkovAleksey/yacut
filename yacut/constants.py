@@ -12,7 +12,7 @@ GENERAITED_SHORT_ID_LENGHT = 6
 class ErrorText():
     """Текст ошибок."""
 
-    SHORT_ID_DUPLICTE = 'Предложенный вариант короткой ссылки уже существует.'
+    SHORT_ID_DUPLICATE = 'Предложенный вариант короткой ссылки уже существует.'
     ID_NOT_FAUND = 'Указанный id не найден'
     REQUEST_BODY_MISSING = 'Отсутствует тело запроса'
     URL_MISSING = '\"url\" является обязательным полем!'

@@ -8,8 +8,9 @@ from flask import flash, render_template, redirect, url_for, abort
 from . import app
 from .forms import URLForm
 from .models import URLMap
-from .utils import get_unique_short_id, add_to_db, check_in_db
+from .utils import get_short_from_db, check_custom_id
 from .constants import ErrorText
+from .exceptions import ShortIdDuplicateError
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -20,33 +21,16 @@ def index_view():
     'POST' запрос создает короткую ссылку.
     """
     if URLForm().validate_on_submit():
-        if URLForm().custom_id.data:
-            if check_in_db(URLMap, URLForm().custom_id.data) is not None:
-                flash(ErrorText.SHORT_ID_DUPLICTE, 'error')
-
-                return render_template('yacut.html', form=URLForm())
-
-            add_to_db(
-                URLMap,
-                URLForm().custom_id.data,
-                URLForm().original_link.data
-            )
-            flash(url_for(
-                'redirect_short_url',
-                short=URLForm().custom_id.data,
-                _external=True), 'short_link'
-            )
+        try:
+            custom_id = check_custom_id(URLMap, URLForm().custom_id.data, URLForm().original_link.data)
+        except ShortIdDuplicateError:
+            flash(ErrorText.SHORT_ID_DUPLICATE, 'error')
 
             return render_template('yacut.html', form=URLForm())
 
-        add_to_db(
-            URLMap,
-            get_unique_short_id(URLForm().original_link.data),
-            URLForm().original_link.data,
-        )
         flash(url_for(
             'redirect_short_url',
-            short=get_unique_short_id(URLForm().original_link.data),
+            short=custom_id,
             _external=True), 'short_link'
         )
 
@@ -58,7 +42,8 @@ def index_view():
 @app.route('/<string:short>', methods=['GET'])
 def redirect_short_url(short):
     """Перенаправляет на оригинальную ссылку."""
-    if check_in_db(URLMap, short) is None:
+    url_map = get_short_from_db(URLMap, short)
+    if url_map is None:
         return abort(HTTPStatus.NOT_FOUND)
 
-    return redirect(check_in_db(URLMap, short).original)
+    return redirect(url_map.original)
