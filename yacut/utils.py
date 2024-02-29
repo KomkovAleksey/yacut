@@ -61,12 +61,12 @@ def check_custom_id(model, custom_id, original):
         custom_id = generaite_unique_short_id(original)
     if validate_custom_id(custom_id) is True:
         raise ValueError()
-    if get_short_from_db(URLMap, custom_id)is not None:
+    if get_short_from_db(URLMap, custom_id) is not None:
         raise ShortIdDuplicateError()
     save_original_and_short_id_in_db(
         model,
         custom_id,
         original,
     )
-    
+
     return custom_id
