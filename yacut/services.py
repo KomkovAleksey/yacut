@@ -1,8 +1,8 @@
 from .exceptions import ShortIdDuplicateError
 from .utils import (
-    generaite_unique_short_id, 
-    validate_custom_id, 
-    get_short_from_db, 
+    generaite_unique_short_id,
+    validate_custom_id,
+    get_short_from_db,
     save_original_and_short_id_in_db,
 )
 
