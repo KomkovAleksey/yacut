@@ -7,8 +7,8 @@ from flask import flash, render_template, redirect, url_for, abort
 
 from . import app
 from .forms import URLForm
-from .models import URLMap
-from .utils import get_short_from_db, check_custom_id
+from .services import creating_custom_id
+from .utils import get_short_from_db
 from .constants import ErrorText
 from .exceptions import ShortIdDuplicateError
 
@@ -22,7 +22,10 @@ def index_view():
     """
     if URLForm().validate_on_submit():
         try:
-            custom_id = check_custom_id(URLMap, URLForm().custom_id.data, URLForm().original_link.data)
+            custom_id = creating_custom_id(
+                URLForm().custom_id.data,
+                URLForm().original_link.data
+            )
         except ShortIdDuplicateError:
             flash(ErrorText.SHORT_ID_DUPLICATE, 'error')
 
@@ -34,15 +37,13 @@ def index_view():
             _external=True), 'short_link'
         )
 
-        return render_template('yacut.html', form=URLForm())
-
     return render_template('yacut.html', form=URLForm())
 
 
 @app.route('/<string:short>', methods=['GET'])
 def redirect_short_url(short):
     """Перенаправляет на оригинальную ссылку."""
-    url_map = get_short_from_db(URLMap, short)
+    url_map = get_short_from_db(short)
     if url_map is None:
         return abort(HTTPStatus.NOT_FOUND)
 

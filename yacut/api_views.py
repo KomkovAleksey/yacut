@@ -9,7 +9,8 @@ from .models import URLMap
 from .error_handlers import InvalidAPIUsage
 from .exceptions import ShortIdDuplicateError
 from .constants import ErrorText
-from .utils import get_short_from_db, check_custom_id
+from .services import creating_custom_id
+from .utils import get_short_from_db
 
 
 @app.route('/api/id/<short_id>/', methods=['GET'])
@@ -18,7 +19,7 @@ def get_original_url(short_id):
     GET-запрос на получение оригинальной ссылки
     по указанному короткому идентификатору.
     """
-    url_map = get_short_from_db(URLMap, short_id)
+    url_map = get_short_from_db(short_id)
     if url_map is None:
         raise InvalidAPIUsage(
             ErrorText.ID_NOT_FAUND,
@@ -38,7 +39,7 @@ def add_url():
         raise InvalidAPIUsage(ErrorText.URL_MISSING)
     original = data.get('url')
     try:
-        custom_id = check_custom_id(URLMap, data.get('custom_id'), original)
+        custom_id = creating_custom_id(data.get('custom_id'), original)
     except ValueError:
         raise InvalidAPIUsage(
             ErrorText.SHORT_LINK_INVALID_NAME
