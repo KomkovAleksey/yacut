@@ -28,13 +28,10 @@
 
 * Клонируйте репозиторий и перейдите в него в командной строке:
 ```
-mkdir yacut
+git clone https://github.com/KomkovAleksey/yacut
 ```
 ```
 cd yacut
-```
-```
-git clone https://github.com/KomkovAleksey/yacut
 ```
 Cоздайте и активируйте виртуальное окружение:
 
